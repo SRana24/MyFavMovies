@@ -13,12 +13,14 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import Card from '../../components/Card';
 import Pagination from '../../components/Pagination';
+import Loader from '../../components/Loader';
 
 const Search = () => {
   const navigation = useNavigation();
   const [searchData, setSearchData] = useState();
   const [inputData, setInputData] = useState();
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const options = {
     method: 'GET',
@@ -36,6 +38,7 @@ const Search = () => {
     },
   };
   useEffect(() => {
+    setLoading(true);
     axios
       .request(options)
       .then(function (response) {
@@ -43,6 +46,9 @@ const Search = () => {
       })
       .catch(function (error) {
         console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [inputData, page]);
   // SEARCH FUNCTION
@@ -66,6 +72,10 @@ const Search = () => {
     }
   };
 
+  const clearText = () => {
+    setInputData('');
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       {/* HEADER AND SEARCH FIELD */}
@@ -85,43 +95,53 @@ const Search = () => {
           </View>
         </View>
 
-        <TextInput
-          style={{
-            borderRadius: 24,
-            backgroundColor: '#fff',
-            width: '90%',
-            alignSelf: 'center',
-            paddingVertical: '4%',
-            paddingHorizontal: '6%',
-          }}
-          placeholder="Search"
-          placeholderTextColor="#888"
-          value={inputData}
-          onChangeText={handleInputChange}
-          clearButtonMode="while-editing"></TextInput>
+        <View style={styles.Inputcontainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Search"
+            placeholderTextColor="#888"
+            value={inputData}
+            onChangeText={handleInputChange}
+          />
+          {inputData?.length > 0 && (
+            <TouchableOpacity
+              onPress={clearText}
+              style={styles.clearButton}
+              activeOpacity={0.8}>
+              <Image
+                source={require('../../assets/Images/cancel.png')}
+                style={{height: 24, width: 24}}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
-      <ScrollView
-        ref={scrollViewRef}
-        contentContainerStyle={styles.cardContainer}
-        horizontal={false}>
-        {searchData?.length > 0 ? (
-          <>
-            {searchData.map((item, index) => (
-              <Card key={index} visibleData={item} />
-            ))}
-            <Pagination
-              currentPage={page}
-              totalPages={searchData.total_pages}
-              onPageChange={onPageChange}
-            />
-          </>
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>Please Search to see results</Text>
-          </View>
-        )}
-      </ScrollView>
+      {loading ? (
+        <Loader />
+      ) : (
+        <ScrollView
+          ref={scrollViewRef}
+          contentContainerStyle={styles.cardContainer}
+          horizontal={false}>
+          {searchData?.length > 0 ? (
+            <>
+              {searchData.map((item, index) => (
+                <Card key={index} visibleData={item} />
+              ))}
+              <Pagination
+                currentPage={page}
+                totalPages={searchData.total_pages}
+                onPageChange={onPageChange}
+              />
+            </>
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>Please Search to see results</Text>
+            </View>
+          )}
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -159,6 +179,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     textAlign: 'center',
+  },
+  Inputcontainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
+  input: {
+    borderRadius: 24,
+    backgroundColor: '#fff',
+    width: '90%',
+    alignSelf: 'center',
+    paddingVertical: '4%',
+    paddingHorizontal: '6%',
+  },
+  clearButton: {
+    position: 'absolute',
+    right: 10,
+    padding: 8,
+    top: 3,
   },
 });
 export default Search;

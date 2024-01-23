@@ -6,15 +6,18 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Card from '../../components/Card';
 import axios from 'axios';
 import Pagination from '../../components/Pagination';
+import Loader from '../../components/Loader';
 
 const Home = () => {
   const [data, setData] = useState();
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState('now_playing');
+  const [loading, setLoading] = useState(true);
 
   const options = {
     method: 'GET',
@@ -28,6 +31,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     axios
       .request(options)
       .then(function (response) {
@@ -35,6 +39,9 @@ const Home = () => {
       })
       .catch(function (error) {
         console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [page, filter]);
 
@@ -68,45 +75,49 @@ const Home = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-      <View style={{paddingBottom: '25%'}}>
-        <View style={styles.container}>
-          <View style={styles.headerConatiner}>
-            <View>
-              <Text style={styles.headerText}>TMDB</Text>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.headerConatiner}>
+          <View>
+            <Text style={styles.headerText}>TMDB</Text>
           </View>
         </View>
-        {/* SORT VIEW */}
-        <View style={{backgroundColor: '#000'}}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.buttonContainer}>
-            {['now_playing', 'popular', 'top_rated', 'upcoming'].map(
-              (filterType, id) => (
-                <TouchableOpacity
-                  key={id}
+      </View>
+      {/* SORT VIEW */}
+      <View style={{backgroundColor: '#000'}}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.buttonContainer}>
+          {['now_playing', 'popular', 'top_rated', 'upcoming'].map(
+            (filterType, id) => (
+              <TouchableOpacity
+                key={id}
+                style={{
+                  ...styles.button,
+                  backgroundColor: isFilterActive(filterType)
+                    ? '#1DB954'
+                    : '#fff',
+                }}
+                activeOpacity={0.8}
+                onPress={() => handlePress(filterType)}>
+                <Text
                   style={{
-                    ...styles.button,
-                    backgroundColor: isFilterActive(filterType)
-                      ? '#1DB954'
-                      : '#fff',
-                  }}
-                  activeOpacity={0.8}
-                  onPress={() => handlePress(filterType)}>
-                  <Text
-                    style={{
-                      ...styles.buttonText,
-                      color: isFilterActive(filterType) ? '#fff' : '#000',
-                    }}>
-                    {filterType.replace('_', ' ').toUpperCase()}
-                  </Text>
-                </TouchableOpacity>
-              ),
-            )}
-          </ScrollView>
-        </View>
-        {/* CARDS AND PAGINATION */}
+                    ...styles.buttonText,
+                    color: isFilterActive(filterType) ? '#fff' : '#000',
+                  }}>
+                  {filterType.replace('_', ' ').toUpperCase()}
+                </Text>
+              </TouchableOpacity>
+            ),
+          )}
+        </ScrollView>
+      </View>
+      {/* CARDS AND PAGINATION */}
+
+      {loading ? (
+        // loader view
+        <Loader />
+      ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
           ref={scrollViewRef}
@@ -121,7 +132,7 @@ const Home = () => {
             onPageChange={onPageChange}
           />
         </ScrollView>
-      </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -131,8 +142,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-
-    paddingBottom: '8%',
+    paddingBottom: '25%',
   },
   container: {
     height: 60,
@@ -170,6 +180,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  loadingContainer: {
+    height: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
