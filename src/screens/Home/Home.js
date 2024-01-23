@@ -38,14 +38,8 @@ const Home = () => {
       });
   }, [page, filter]);
 
-  // FUNCTION FOR SORT FILTER (MOST POPULAR , TOP RATED....ETC)
-  const isFilterActive = filterType => filter === filterType;
+  // SCROLL REF FOR PAGINATION BUTTON AND SORT BUTTON
 
-  const handlePress = filterType => {
-    setFilter(filterType);
-  };
-
-  // BELOW FUNCTION AND CODE FOR PAGINATION
   const scrollViewRef = useRef();
 
   const handleScrollToTop = () => {
@@ -53,6 +47,17 @@ const Home = () => {
       scrollViewRef.current.scrollTo({y: 0, animated: true});
     }
   };
+
+  // FUNCTION FOR SORT FILTER (MOST POPULAR , TOP RATED....ETC)
+
+  const isFilterActive = filterType => filter === filterType;
+
+  const handlePress = filterType => {
+    setFilter(filterType);
+    handleScrollToTop();
+  };
+
+  // BELOW FUNCTION AND CODE FOR PAGINATION
 
   const onPageChange = value => {
     if (value >= 1 || value <= data?.total_pages) {

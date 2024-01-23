@@ -62,12 +62,6 @@ const Card = ({visibleData}) => {
           </Text>
         </View>
         <View style={styles.starContainer}>
-          {/* <FontAwesome
-            name="star"
-            color={'#ffaa1d'}
-            size={12}
-            style={{paddingLeft: 6}}
-          /> */}
           <Image
             source={require('../assets/Images/star.png')}
             style={{height: 14, width: 14}}
