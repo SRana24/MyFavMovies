@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Card from '../../components/Card';
 import axios from 'axios';
@@ -142,7 +143,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingBottom: '25%',
   },
   container: {
     height: 60,

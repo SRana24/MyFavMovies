@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-
 import axios from 'axios';
 import Card from '../../components/Card';
 import Pagination from '../../components/Pagination';
@@ -154,7 +153,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingBottom: '6%',
   },
   rowConatiner: {
     paddingHorizontal: '5%',
