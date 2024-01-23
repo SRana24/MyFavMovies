@@ -24,7 +24,7 @@ const Card = ({visibleData}) => {
   };
 
   const renderDescription = text => {
-    const maxCharacters = 35; // Set your desired maximum number of characters for the description
+    const maxCharacters = 32; // Set your desired maximum number of characters for the description
     return (
       <Text>
         {text.length > maxCharacters
@@ -71,7 +71,7 @@ const Card = ({visibleData}) => {
           </Text>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={{color: '#000'}}>
+          <Text style={{color: '#000', fontSize: 13}}>
             {renderDescription(visibleData?.overview)}
           </Text>
         </View>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   imageContainer: {
-    height: '62%',
+    height: '60%',
   },
   image: {
     flex: 1,
