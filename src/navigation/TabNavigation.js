@@ -13,6 +13,7 @@ import {
 const Tab = createBottomTabNavigator();
 
 const CustomTabBar = ({state, descriptors, navigation}) => {
+  // this use effect is for keyboard avoding purpose beacuse customtabbar is being used and does not support props.
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
   }, []);
 
   if (keyboardVisible) {
-    // Return null when keyboard is visible to hide the custom tab bar
+    // return null when keyboard is visible to hide the custom tab bar
     return null;
   }
   return (
@@ -63,7 +64,6 @@ const CustomTabBar = ({state, descriptors, navigation}) => {
             ? require('../assets/Images/greenHome.png')
             : require('../assets/Images/whiteHome.png');
         } else if (route.name === 'Search') {
-          // You can add a different image source for the Search tab if needed
           imageSource = isFocused
             ? require('../assets/Images/greenSearch.png')
             : require('../assets/Images/whiteSearch.png');

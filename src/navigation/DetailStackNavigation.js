@@ -1,6 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {HeaderBackButton} from '@react-navigation/elements';
 
 import MovieDetail from '../screens/MovieDetail/MovieDetail';
 
