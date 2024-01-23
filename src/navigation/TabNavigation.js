@@ -1,13 +1,44 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Home from '../screens/Home/Home';
 import Search from '../screens/Search/Search';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-// import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  Image,
+  Keyboard,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBar = ({state, descriptors, navigation}) => {
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+  if (keyboardVisible) {
+    // Return null when keyboard is visible to hide the custom tab bar
+    return null;
+  }
   return (
     <View style={sttyles.customTabBarView}>
       {state.routes.map((route, index) => {
@@ -60,13 +91,15 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
+      screenOptions={{
+        tabBarHideOnKeyboard: true,
+      }}
       tabBar={props => <CustomTabBar {...props} />}
       barStyle={{backgroundColor: 'red'}}>
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          tabBarHideOnKeyboard: true,
           headerShown: false,
         }}
       />
@@ -76,7 +109,6 @@ const TabNavigation = () => {
         component={Search}
         options={{
           tabBarLabel: 'Search',
-          tabBarHideOnKeyboard: true,
           headerShown: false,
         }}
       />

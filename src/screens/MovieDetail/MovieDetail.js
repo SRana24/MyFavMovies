@@ -10,8 +10,6 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
-// import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const MovieDetail = () => {
   const route = useRoute();
@@ -76,12 +74,13 @@ const MovieDetail = () => {
 
               <View style={styles.rowAlign}>
                 <Text style={styles.leftViewTitleKey}>Ratings:</Text>
-                <FontAwesome
-                  name="star"
-                  color={'#ffaa1d'}
-                  size={12}
-                  style={{paddingLeft: 6}}
-                />
+                <View style={{paddingLeft: 6}}>
+                  <Image
+                    source={require('../../assets/Images/star.png')}
+                    style={{height: 15, width: 15}}
+                  />
+                </View>
+
                 <Text style={styles.ratingText}>
                   {Math.round(data?.vote_average)} /10
                 </Text>
