@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
+  Platform,
   SafeAreaView,
   ScrollView,
   Text,
@@ -188,14 +189,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '90%',
     alignSelf: 'center',
-    paddingVertical: '4%',
+    paddingVertical: Platform.OS === 'ios' ? '4.2%' : '3%',
     paddingHorizontal: '6%',
+    color: '#000',
   },
   clearButton: {
     position: 'absolute',
-    right: 10,
-    padding: 8,
-    top: 3,
+    right: 12,
+    top: '50%',
+    transform: [{translateY: -12}],
   },
 });
 export default Search;

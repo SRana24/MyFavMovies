@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
   },
   overview: {
     fontWeight: '500',
+    color: '#000',
   },
   genreContainer: {
     marginRight: 8,
